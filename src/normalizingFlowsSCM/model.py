@@ -20,7 +20,7 @@ from src.normalizingFlowsSCM.arch import BasicFlowConvNet
 
 
 class FlowSCM(pyroModule):
-    def __init__(self, use_affine_ex=True, **kwargs)
+    def __init__(self, use_affine_ex=True, **kwargs):
         super.__init__(**kwargs)
 
         self.num_scales = 2
