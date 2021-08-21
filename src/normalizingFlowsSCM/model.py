@@ -19,7 +19,7 @@ from pyro.nn import DenseNN
 # from src.normalizingFlowsSCM.arch import BasicFlowConvNet
 
 
-class FlowSCM(pyroModule):
+class FlowSCM(PyroModule):
     def __init__(self, use_affine_ex=True, **kwargs):
         super.__init__(**kwargs)
 
