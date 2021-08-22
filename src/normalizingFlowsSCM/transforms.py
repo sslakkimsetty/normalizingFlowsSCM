@@ -14,6 +14,7 @@ class SqueezeTransform(Transform):
     > L. Dinh et al., Density estimation using Real NVP, ICLR 2017.
     """
 
+    domain = constraints.real
     codomain = constraints.real
     bijective = True
     event_dim = 3
@@ -91,13 +92,14 @@ class SqueezeTransform(Transform):
 
 
 class ReshapeTransform(Transform):
+    domain = constraints.real
     codomain = constraints.real
     bijective = True
     volume_preserving = True
 
     def __init__(self, input_shape, output_shape):
         super().__init__()
-        self.event_dim = len(input_shape)
+        # self.event_dim = len(input_shape)
         self.inv_event_dim = len(output_shape)
         self.input_shape = input_shape
         self.output_shape = output_shape
@@ -139,7 +141,7 @@ class ReshapeTransform(Transform):
         determinant is -1 or +1), and so returning a vector of zeros works.
         """
 
-        log_abs_det_jacobian = torch.zeros(x.size()[:-self.event_dim], dtype=x.dtype, layout=x.layout, device=x.device)
+        log_abs_det_jacobian = torch.zeros(x.size()[:-3], dtype=x.dtype, layout=x.layout, device=x.device)
         return log_abs_det_jacobian
 
 
@@ -169,15 +171,16 @@ class TransposeTransform(Transform):
     :type permutation: torch.LongTensor
     """
 
+    domain = constraints.real
     codomain = constraints.real
     bijective = True
     volume_preserving = True
 
     def __init__(self, permutation):
-        super().__init__(cache_size=1)
-
-        self.event_dim = len(permutation)
+        # self.event_dim = len(permutation)
         self.permutation = permutation
+
+        super().__init__(cache_size=1)
 
     @lazy_property
     def inv_permutation(self):
@@ -222,7 +225,7 @@ class TransposeTransform(Transform):
         determinant is -1 or +1), and so returning a vector of zeros works.
         """
 
-        log_abs_det_jacobian = torch.zeros(x.size()[:-self.event_dim], dtype=x.dtype, layout=x.layout, device=x.device)
+        log_abs_det_jacobian = torch.zeros(x.size()[:-3], dtype=x.dtype, layout=x.layout, device=x.device)
         return log_abs_det_jacobian
 
 

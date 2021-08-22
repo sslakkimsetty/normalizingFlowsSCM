@@ -53,10 +53,19 @@ class BasicFlowConvNet(nn.Module):
 
         if context is not None:
             # assuming scalar inputs [B, C]
-            context = context.view(*context.shape, 1, 1).expand(-1, -1, *outputs.shape[2:])
-            outputs = torch.cat([outputs, context], 1)
+            """
+            torch.Size([16, 16, 8])
+            torch.Size([1, 1, 16])
+            Ouptus torch.Size([1, 8, 16, 16])
+            """
+            context = context.view(*context.shape, 1, 1).expand(-1, *outputs.shape[1:])
+            outputs = torch.cat([outputs, context], 0)
+            if num_batch == 0:
+                outputs = outputs.view(-1, *outputs.shape)
 
         outputs = self.seq1(outputs)
+        if num_batch == 0:
+            outputs = outputs.view(*outputs.shape[1:])
 
         permutation = np.array((1, 2, 0)) + num_batch
         outputs = outputs.permute(*np.arange(num_batch), *permutation).contiguous()
